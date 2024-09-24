@@ -42,24 +42,32 @@
   </div>
 
   <!-- Modal Editar -->
-  <div class="modal fade" id="ModalEdicion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalEdicion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Editar tipo de usuario</h5>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar tipo de usuario</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="idpersona">
+                <label>Actualizar usuario</label>
+                <input type="text" id="usuariou" class="form-control input-sm">
+                
+                <!-- Añadir el campo de selección para el estado -->
+                <label>Estado</label>
+                <select id="estadou" class="form-control input-sm">
+                    <option value="A">Activo</option>
+                    <option value="I">Inactivo</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="actualizatipousuario">Actualizar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <input type="hidden" id="idpersona">
-          <label>Actualizar usuario</label>
-          <input type="text" id="usuariou" class="form-control input-sm">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-warning" id="actualizatipousuario">Actualizar</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
 
   <script type="text/javascript">
     $(document).ready(function(){
@@ -113,41 +121,50 @@
     }
 
     function agregaform(datos){
-      // Extraer los datos y cargarlos en el modal de edición
-      d = datos.split('||');
-      $('#idpersona').val(d[0]);  // Cargar el ID de la persona
-      $('#usuariou').val(d[1]);  // Cargar el nombre del usuario en el modal de edición
+    // Asegúrate de que estás capturando los 3 valores: id, usuario y estado
+    d = datos.split('||');
+    
+    if (d[0] && d[1] && d[2]) {  // Asegúrate de que hay valores antes de asignarlos
+        $('#idpersona').val(d[0]);
+        $('#usuariou').val(d[1]);
+        $('#estadou').val(d[2]);  // Captura el estado (A o I)
+    } else {
+        console.error("Datos incompletos para editar:", datos);
+    }
+}
 
-      // Mostrar el modal de edición
-      $('#ModalEdicion').modal('show');
+    function actualizaDatos() {
+    var id = $('#idpersona').val();
+    var usuario = $('#usuariou').val();
+    var estado = $('#estadou').val();  // Asegúrate de que el estado se captura correctamente
+
+    // Validar antes de proceder
+    if (!id || !usuario || !estado) {
+        console.error("ID, usuario o estado no están definidos:", id, usuario, estado);
+        alertify.error("ID, nombre de usuario o estado no válidos.");
+        return;  // Sal del proceso si los valores no son válidos
     }
 
-    function actualizaDatos(){
-      var id = $('#idpersona').val();  // Obtener el ID
-      var usuario = $('#usuariou').val();  // Obtener el nombre del usuario
-      var cadena = "id=" + id + "&tusuario=" + usuario;  // Crear la cadena para enviar
+    var cadena = "id=" + id + "&tusuario=" + usuario + "&estado=" + estado;
 
-      $.ajax({
+    $.ajax({
         type: "POST",
         url: "php/actualizaDatos.php",
         data: cadena,
         success: function(r) {
-          if (r == 1) {
-            alertify.success("Actualizado con éxito :)");
-            $('#tabla').load('componentes/tabla.php');
-            $('#ModalEdicion').modal('hide');  // Cierra el modal de edición
-            $('.modal-backdrop').remove();  // Elimina el backdrop
-            $('body').removeClass('modal-open');  // Remueve la clase modal-open del body
-            $('body').css('padding-right', '');  // Restablece el padding
-          } else {
-            alertify.error("Error del servidor: " + r);
-          }
+            if (r == 1) {
+                alertify.success("Actualizado con éxito :)");
+                $('#tabla').load('componentes/tabla.php');
+                $('#ModalEdicion').modal('hide');  // Cierra el modal
+            } else {
+                alertify.error("Error del servidor: " + r);
+            }
         },
         error: function(xhr, status, error) {
-          alertify.error("Fallo en la comunicación con el servidor: " + error);
+            alertify.error("Fallo en la comunicación con el servidor: " + error);
         }
-      });
-    }
+    });
+}
 
     function preguntarSiNo(id){
       alertify.confirm('¿Está seguro de eliminar este registro?', 
