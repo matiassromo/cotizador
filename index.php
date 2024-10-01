@@ -111,7 +111,7 @@
             $('body').removeClass('modal-open');  // Remueve la clase modal-open del body
             $('body').css('padding-right', '');  // Restablece el padding
           } else {
-            alertify.error("Error del servidor: " + r);
+            alertify.error("El campo está vacío" + r);
           }
         },
         error: function(xhr, status, error) {
@@ -208,3 +208,6 @@
     overflow-y: auto;
   }
 </style>
+
+
+

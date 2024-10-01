@@ -1,13 +1,15 @@
 <?php 
+require_once "conexion.php";
+$conexion = conexion();
 
-	require_once "conexion.php";
-	$conexion=conexion();
+$u = trim($_POST['tusuario']);
 
-	$u = $_POST['tusuario'];
+// Validar que el campo no esté vacío
+if (empty($u)) { // Enviar una respuesta de error
+    exit();
+}
 
-	$sql = "INSERT INTO tipo_usuarios (nombre_tipo) VALUES ('$u')";
+$sql = "INSERT INTO tipo_usuarios (nombre_tipo) VALUES ('$u')";
 
-	echo $result = mysqli_query($conexion, $sql);
-	
- ?>
-
+echo $result = mysqli_query($conexion, $sql);
+?>

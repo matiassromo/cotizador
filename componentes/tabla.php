@@ -10,7 +10,7 @@
 			<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalNuevo">
 				Agregar tipo de usuario
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-					<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+					<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/> 
 				</svg>
 			</button>
 		</caption>
@@ -34,7 +34,7 @@
 
 			<tr>
 				<td><?php echo $ver[1]; ?></td> <!-- nombre_tipo -->
-				<td><?php echo $ver[2] == 'A' ? 'Activo' : 'Inactivo'; ?></td> <!-- estado -->
+				<td><?php echo $ver[2] == 'A' ? 'A' : 'I'; ?></td> <!-- estado -->
 				<td>
 					<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalEdicion" onclick="agregaform('<?php echo $datos; ?>')">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
