@@ -96,29 +96,36 @@
     });
 
     function agregardatos(tusuario) {
-      var cadena = "tusuario=" + tusuario;
+    // Validar que el campo no esté vacío
+    if (tusuario.trim() === "") {
+        alertify.error("El campo Tipo de Usuario no puede estar vacío.");
+        return;  // Detener el proceso si está vacío
+    }
 
-      $.ajax({
+    var cadena = "tusuario=" + tusuario;
+
+    $.ajax({
         type: "POST",
         url: "php/agregarDatos.php",
         data: cadena,
         success: function(r) {
-          if (r == 1) {
-            alertify.success("Agregado con éxito :)");
-            $('#tabla').load('componentes/tabla.php');
-            $('#ModalNuevo').modal('hide');  // Cierra el modal
-            $('.modal-backdrop').remove();  // Elimina el backdrop
-            $('body').removeClass('modal-open');  // Remueve la clase modal-open del body
-            $('body').css('padding-right', '');  // Restablece el padding
-          } else {
-            alertify.error("El campo está vacío" + r);
-          }
+            if (r == 1) {
+                alertify.success("Agregado con éxito :)");
+                $('#tabla').load('componentes/tabla.php');
+                $('#ModalNuevo').modal('hide');  // Cierra el modal
+                $('.modal-backdrop').remove();  // Elimina el backdrop
+                $('body').removeClass('modal-open');  // Remueve la clase modal-open del body
+                $('body').css('padding-right', '');  // Restablece el padding
+            } else {
+                alertify.error("Error del servidor: " + r);
+            }
         },
         error: function(xhr, status, error) {
-          alertify.error("Fallo en la comunicación con el servidor: " + error);
+            alertify.error("Fallo en la comunicación con el servidor: " + error);
         }
-      });
-    }
+    });
+}
+
 
     function agregaform(datos){
     // Asegúrate de que estás capturando los 3 valores: id, usuario y estado
