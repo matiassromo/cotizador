@@ -1,14 +1,3 @@
-<?php
-session_start();
-
-// Verificar si el usuario está autenticado y si es un administrador (id_tipo_usuario = 1)
-if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 136) {
-    header('Location: login.php');
-    exit();
-}
-?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -227,43 +216,3 @@ if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 136)
   }
 </style>
 
-<?php
-session_start();
-
-// Verifica si el usuario está autenticado y es administrador
-if (!isset($_SESSION['nombre_usuario']) || $_SESSION['id_tipo_usuario'] != 'Administrador') {
-    echo "No tienes permisos para realizar esta acción.";
-    exit();
-}
-
-// Aquí sigue el código para crear un nuevo usuario
-?>
-
-
-
-
-
-
-<?php
-require_once "conexion.php";
-$conexion = conexion();
-
-// Nueva contraseña para el administrador (cambiar si lo deseas)
-$nueva_contrasena = 'nueva_contrasena_segura';
-
-// Cifrar la nueva contraseña
-$contrasena_cifrada = password_hash($nueva_contrasena, PASSWORD_DEFAULT);
-
-// Actualizar la contraseña del administrador
-$sql = "UPDATE usuarios SET password = ?, id_tipo_usuario = 1 WHERE email = 'admin@ejemplo.com'";
-$stmt = $conexion->prepare($sql);
-$stmt->bind_param('s', $contrasena_cifrada);
-
-if ($stmt->execute()) {
-    echo "Contraseña actualizada correctamente.";
-} else {
-    echo "Error al actualizar la contraseña: " . $conexion->error;
-}
-
-$conexion->close();
-?>
