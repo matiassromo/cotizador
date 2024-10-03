@@ -25,22 +25,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
             $_SESSION['id_tipo_usuario'] = $usuario['id_tipo_usuario'];
 
-            // Redirigir al administrador a la página de bienvenida
-            header("Location: admin_dashboard.php");
-            exit();
+            // Redirigir al dashboard del administrador si es admin
+            if ($_SESSION['id_tipo_usuario'] == 136) {
+                header("Location: admin_dashboard.php");
+                exit();
+            }
         } else {
-            // Contraseña incorrecta, se usa alertify
-            echo "<script>
-                    alertify.error('Contraseña incorrecta');
-                    setTimeout(function(){ window.location.href = 'login.php'; }, 2000);
-                  </script>";
+            // Contraseña incorrecta
+            $error = "Contraseña incorrecta";
         }
     } else {
-        // El usuario no existe, se usa alertify
-        echo "<script>
-                alertify.error('El usuario no existe');
-                setTimeout(function(){ window.location.href = 'login.php'; }, 2000);
-              </script>";
+        // El usuario no existe
+        $error = "El usuario no existe";
     }
 }
 ?>
@@ -54,13 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="librerias/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="librerias/alertifyjs/css/alertify.css">
     <link rel="stylesheet" href="librerias/alertifyjs/css/themes/default.css">
-    <script src="librerias/alertifyjs/alertify.js"></script> <!-- Carga de alertify.js -->
 </head>
 <body>
     <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card p-4" style="width: 300px;">
             <h3 class="text-center">Iniciar sesión</h3>
-            <form method="POST" action="login.php">
+            <form method="POST" action="">
                 <div class="form-group">
                     <label for="email">Correo Electrónico:</label>
                     <input type="email" name="email" class="form-control" required>
@@ -78,5 +73,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Script de alertify.js -->
     <script src="librerias/alertifyjs/alertify.js"></script>
+
+    <!-- Mostrar errores con alertify -->
+    <?php if (isset($error)): ?>
+    <script>
+        alertify.error('<?php echo $error; ?>');
+    </script>
+    <?php endif; ?>
 </body>
 </html>
