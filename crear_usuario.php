@@ -54,12 +54,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->CharSet = 'UTF-8';
 
             // Configuración del correo
-            $mail->setFrom('tu_correo@gmail.com', 'Nombre del Remitente');
+            $mail->setFrom('tu_correo@gmail.com', 'Soporte HEKA');
             $mail->addAddress($email);  // Correo del destinatario (el que ingresó en el formulario)
 
             // Contenido del correo
             $mail->isHTML(true);
-            $mail->Subject = 'Contraseña generada';
+            $mail->Subject = 'Contraseña generada cotizador';
             $mail->Body    = 'Hola ' . $nombre_usuario . ',<br><br>Tu cuenta ha sido creada exitosamente. Tu contraseña temporal es: <strong>' . $password_aleatoria . '</strong><br>Por favor, cambia esta contraseña después de iniciar sesión.';
 
             $mail->send();
