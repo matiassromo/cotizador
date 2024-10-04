@@ -3,6 +3,12 @@ session_start();
 require_once 'php/conexion.php';
 $conexion = conexion();
 
+// Si ya hay una sesión iniciada, redirigir al dashboard del administrador
+if (isset($_SESSION['id_tipo_usuario']) && $_SESSION['id_tipo_usuario'] == 136) {
+    header("Location: admin_dashboard.php");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -25,15 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
             $_SESSION['id_tipo_usuario'] = $usuario['id_tipo_usuario'];
 
-            // Redirigir al dashboard del administrador si es admin
-            if ($_SESSION['id_tipo_usuario'] == 136) {
-                header("Location: admin_dashboard.php");
-                exit();
-            }
+            // Establecer una variable de sesión para el mensaje de éxito
+            $_SESSION['mensaje_login_exitoso'] = "Inicio de sesión exitoso";
+
+            // Redirigir al dashboard del administrador si es admin, siguiendo el patrón PRG
+            header("Location: admin_dashboard.php");
+            exit();
         } else {
-            // Contraseña incorrecta
             $error = "Contraseña incorrecta";
         }
+
     } else {
         // El usuario no existe
         $error = "El usuario no existe";

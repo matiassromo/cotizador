@@ -43,10 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             // Configuración del servidor SMTP
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+            $mail->Host = 'smtp.office365.com';  // Servidor SMTP de Gmail
             $mail->SMTPAuth = true;
-            $mail->Username = 'matiasromo15@gmail.com';  // Tu correo de Gmail
-            $mail->Password = 'danj uxel cvof tegy';  // Tu contraseña de Gmail o contraseña de aplicación
+            $mail->Username = 'impresora@heka.com.ec';  // Tu correo de Gmail
+            $mail->Password = '4kV46P_8]U~pm54';  // Tu contraseña de Gmail o contraseña de aplicación
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 

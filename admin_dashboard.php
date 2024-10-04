@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 
 // Verificar si el usuario es un administrador
@@ -6,6 +6,19 @@ if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 136)
     header("Location: login.php");
     exit();
 }
+
+// Verificar si hay un mensaje de inicio de sesión exitoso
+if (isset($_SESSION['mensaje_login_exitoso'])) {
+    $mensaje_login = $_SESSION['mensaje_login_exitoso'];
+    // Eliminar el mensaje después de mostrarlo para evitar que se muestre siempre
+    unset($_SESSION['mensaje_login_exitoso']);
+}
+
+// Desactivar el caché para evitar que el navegador almacene la página anterior
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +56,13 @@ if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 136)
         </form>
     </div>
 
+    <!-- Mostrar la alerta si el mensaje existe -->
+    <?php if (isset($mensaje_login)): ?>
+    <script>
+        alertify.success('<?php echo $mensaje_login; ?>');
+    </script>
+    <?php endif; ?>
+
     <!-- Script para manejar el envío del formulario con AJAX -->
     <script>
         document.getElementById('crearUsuarioForm').addEventListener('submit', function(event) {
@@ -65,5 +85,13 @@ if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 136)
             });
         });
     </script>
+
+    <!-- Previene volver al login al usar el botón atrás del navegador -->
+    <script type="text/javascript">
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
 </body>
 </html>
