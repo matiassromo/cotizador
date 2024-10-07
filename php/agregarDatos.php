@@ -1,16 +1,18 @@
-<?php 
-require_once "conexion.php";
+<?php
+require_once 'conexion.php'; // Asegúrate de que tienes la conexión a la base de datos
 $conexion = conexion();
 
-$u = trim($_POST['tusuario']);
+if (isset($_POST['tusuario'])) {
+    $tusuario = $_POST['tusuario'];
+    
+    $sql = "INSERT INTO tipo_usuarios (nombre_tipo) VALUES ('$tusuario')";
+    $result = mysqli_query($conexion, $sql);
 
-// Validar que el campo no esté vacío
-if (empty($u)) {
-    echo 0;  // Respuesta de error
-    exit();  // Detener la ejecución del script
+    if ($result) {
+        echo 1;
+    } else {
+        echo 0;
+    }
 }
 
-$sql = "INSERT INTO tipo_usuarios (nombre_tipo) VALUES ('$u')";
-
-echo $result = mysqli_query($conexion, $sql);
 ?>

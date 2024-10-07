@@ -1,14 +1,24 @@
 <?php
 session_start();
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+// Verificar si hay un mensaje de cierre de sesión exitoso
+$logout_message = "";
+if (isset($_SESSION['mensaje_logout'])) {
+    $logout_message = $_SESSION['mensaje_logout'];
+    unset($_SESSION['mensaje_logout']);
+}
+
 require_once 'php/conexion.php';
 $conexion = conexion();
 
-// Si ya hay una sesión iniciada, redirigir al dashboard del administrador
+// Si ya hay una sesión iniciada, redirigir al dashboard
 if (isset($_SESSION['id_tipo_usuario']) && $_SESSION['id_tipo_usuario'] == 136) {
-    header("Location: admin_dashboard.php");
+    header("Location: index.php");
     exit();
 }
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -19,11 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     // Verificar si el usuario existe
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
-        
+
         // Verificar la contraseña usando password_verify
         if (password_verify($password, $usuario['password'])) {
             // Iniciar la sesión y guardar los datos del usuario
@@ -34,8 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Establecer una variable de sesión para el mensaje de éxito
             $_SESSION['mensaje_login_exitoso'] = "Inicio de sesión exitoso";
 
-            // Redirigir al dashboard del administrador si es admin, siguiendo el patrón PRG
-            header("Location: admin_dashboard.php");
+            // Redirigir al dashboard del administrador si es admin
+            header("Location: index.php");
             exit();
         } else {
             $error = "Contraseña incorrecta";
@@ -80,6 +90,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Script de alertify.js -->
     <script src="librerias/alertifyjs/alertify.js"></script>
+
+    <!-- Mostrar mensaje de cierre de sesión exitoso -->
+    <?php if (!empty($logout_message)): ?>
+    <script>
+        alertify.success("<?php echo $logout_message; ?>");
+    </script>
+    <?php endif; ?>
 
     <!-- Mostrar errores con alertify -->
     <?php if (isset($error)): ?>

@@ -22,6 +22,8 @@ function generarPasswordAleatoria($longitud = 10) {
     return $password;
 }
 
+$response = [];  // Array para respuesta
+
 // Si se recibe el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre_usuario = $_POST['nombre_usuario'];
@@ -43,10 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             // Configuración del servidor SMTP
             $mail->isSMTP();
-            $mail->Host = 'smtp.office365.com';  // Servidor SMTP de Gmail
+            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
             $mail->SMTPAuth = true;
-            $mail->Username = 'impresora@heka.com.ec';  // Tu correo de Gmail
-            $mail->Password = '4kV46P_8]U~pm54';  // Tu contraseña de Gmail o contraseña de aplicación
+            $mail->Username = 'matiasromo15@gmail.com';  // Tu correo de Gmail
+            $mail->Password = 'pcop icey gsbm eyvw';  // Tu contraseña de Gmail o contraseña de aplicación
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
@@ -63,14 +65,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Body    = 'Hola ' . $nombre_usuario . ',<br><br>Tu cuenta ha sido creada exitosamente. Tu contraseña temporal es: <strong>' . $password_aleatoria . '</strong><br>Por favor, cambia esta contraseña después de iniciar sesión.';
 
             $mail->send();
-            echo 'Usuario creado exitosamente y correo enviado.';
+            $response['status'] = 'success';
+            $response['message'] = 'Usuario creado y correo enviado correctamente.';
         } catch (Exception $e) {
-            echo "Usuario creado, pero hubo un problema enviando el correo: {$mail->ErrorInfo}";
+            $response['status'] = 'error';
+            $response['message'] = "Usuario creado, pero hubo un problema enviando el correo: {$mail->ErrorInfo}";
         }
     } else {
-        echo "Error al crear el usuario: " . $conexion->error;
+        $response['status'] = 'error';
+        $response['message'] = "Error al crear el usuario: " . $conexion->error;
     }
 
     $conexion->close();
+    // Enviar respuesta en formato JSON
+    echo json_encode($response);
 }
-?>
