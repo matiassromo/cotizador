@@ -14,17 +14,23 @@ if (isset($_SESSION['mensaje_logout'])) {
 require_once 'php/conexion.php';
 $conexion = conexion();
 
-// Si ya hay una sesión iniciada, redirigir al dashboard
-if (isset($_SESSION['id_tipo_usuario']) && $_SESSION['id_tipo_usuario'] == 136) {
+// Verificar si ya hay una sesión iniciada y redirigir al dashboard si es el administrador
+if (isset($_SESSION['id_tipo_usuario']) && $_SESSION['id_tipo_usuario'] == 1) {
     header("Location: index.php");
     exit();
 }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Preparar la consulta para seleccionar el usuario
-    $sql = "SELECT id_usuario, nombre_usuario, email, password, id_tipo_usuario FROM usuarios WHERE email = ?";
+    // Preparar la consulta para seleccionar el usuario con su tipo
+    $sql = "
+        SELECT u.id_usuario, u.nombre_usuario, u.email, u.password, u.id_tipo_usuario, tu.nombre_tipo
+        FROM usuarios u
+        JOIN tipo_usuarios tu ON u.id_tipo_usuario = tu.id_tipo_usuario
+        WHERE u.email = ?
+    ";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -34,12 +40,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
 
+        $hashed_password = password_hash('admin123', PASSWORD_DEFAULT);
+        echo $hashed_password;
+
+
+
         // Verificar la contraseña usando password_verify
         if (password_verify($password, $usuario['password'])) {
             // Iniciar la sesión y guardar los datos del usuario
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
             $_SESSION['nombre_usuario'] = $usuario['nombre_usuario'];
             $_SESSION['id_tipo_usuario'] = $usuario['id_tipo_usuario'];
+            $_SESSION['nombre_tipo_usuario'] = $usuario['nombre_tipo']; // Nombre del tipo de usuario (Administrador, etc.)
 
             // Establecer una variable de sesión para el mensaje de éxito
             $_SESSION['mensaje_login_exitoso'] = "Inicio de sesión exitoso";
@@ -50,7 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $error = "Contraseña incorrecta";
         }
-
     } else {
         // El usuario no existe
         $error = "El usuario no existe";

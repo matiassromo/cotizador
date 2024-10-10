@@ -1,15 +1,17 @@
-<?php 
-require_once "conexion.php";
+<?php
+require_once 'conexion.php';
 $conexion = conexion();
 
-$id = isset($_POST['id']) ? $_POST['id'] : null;
-$u = isset($_POST['tusuario']) ? $_POST['tusuario'] : null;
-$e = isset($_POST['estado']) ? $_POST['estado'] : null;  // Asegúrate de obtener el estado
+if (isset($_POST['id']) && isset($_POST['tusuario']) && isset($_POST['estado'])) {
+    $id = $_POST['id'];
+    $tusuario = $_POST['tusuario'];
+    $estado = $_POST['estado'];
 
-if ($id && $u && $e) {
-    $sql = "UPDATE tipo_usuarios SET nombre_tipo = '$u', estado = '$e' WHERE id_tipo_usuario = '$id'";
-    echo $result = mysqli_query($conexion, $sql);
-} else {
-    echo "Error: Datos incompletos";
+    $sql = "UPDATE tipo_usuarios SET nombre_tipo = '$tusuario', estado = '$estado' WHERE id_tipo_usuario = '$id'";
+    if ($conexion->query($sql)) {
+        echo 1;
+    } else {
+        echo 0;
+    }
 }
 ?>
