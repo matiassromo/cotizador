@@ -2,16 +2,17 @@
 require_once 'conexion.php';
 $conexion = conexion();
 
-if (isset($_POST['id']) && isset($_POST['tusuario']) && isset($_POST['estado'])) {
+if (isset($_POST['id']) && isset($_POST['tipo']) && isset($_POST['estado'])) {
     $id = $_POST['id'];
-    $tusuario = $_POST['tusuario'];
+    $tipo = $_POST['tipo'];
     $estado = $_POST['estado'];
 
-    $sql = "UPDATE tipo_usuarios SET nombre_tipo = '$tusuario', estado = '$estado' WHERE id_tipo_usuario = '$id'";
-    if ($conexion->query($sql)) {
-        echo 1;
+    $sql = "UPDATE tipo_usuarios SET nombre_tipo = '$tipo', estado = '$estado' WHERE id_tipo_usuario = '$id'";
+    if (mysqli_query($conexion, $sql)) {
+        echo 1;  // Devuelve 1 si la actualización fue exitosa
     } else {
-        echo 0;
+        echo 0;  // Devuelve 0 si hubo un error
     }
+} else {
+    echo 0;  // Devuelve 0 si no se recibieron todos los datos
 }
-?>

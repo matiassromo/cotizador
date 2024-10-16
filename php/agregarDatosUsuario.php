@@ -2,26 +2,21 @@
 require_once 'conexion.php';
 $conexion = conexion();
 
-if (isset($_POST['nombres']) && isset($_POST['apellidos']) && isset($_POST['correo']) && isset($_POST['estado']) && isset($_POST['tipo_usuario'])) {
-    $nombre_usuario = $_POST['nombres'];
-    $apellido_usuario = $_POST['apellidos'];
-    $email = $_POST['correo'];
-    $estado = $_POST['estado'];
-    $id_tipo_usuario = $_POST['tipo_usuario']; // Tipo de usuario enviado desde el formulario
+if (isset($_POST['nombre']) && isset($_POST['apellido']) && isset($_POST['email']) && isset($_POST['estado']) && isset($_POST['tipo_usuario'])) {
+    $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
+    $apellido = mysqli_real_escape_string($conexion, $_POST['apellido']);
+    $email = mysqli_real_escape_string($conexion, $_POST['email']);
+    $estado = mysqli_real_escape_string($conexion, $_POST['estado']);
+    $tipo_usuario = mysqli_real_escape_string($conexion, $_POST['tipo_usuario']);
 
-    // Hash de la contraseña por defecto
-    $password = password_hash('default_password', PASSWORD_DEFAULT);  // Cambia esta contraseña según sea necesario
+    $sql = "INSERT INTO usuarios (nombre_usuario, apellido_usuario, email, estado, id_tipo_usuario) VALUES ('$nombre', '$apellido', '$email', '$estado', '$tipo_usuario')";
 
-    // Ajusta los nombres de las columnas a los de tu tabla
-    $sql = "INSERT INTO usuarios (nombre_usuario, apellido_usuario, email, password, estado, id_tipo_usuario) 
-            VALUES ('$nombre_usuario', '$apellido_usuario', '$email', '$password', '$estado', '$id_tipo_usuario')";
-    
-    if ($conexion->query($sql)) {
-        echo 1; // Éxito
+    if (mysqli_query($conexion, $sql)) {
+        echo 1;  // Retorna 1 si la inserción fue exitosa
     } else {
-        echo "Error SQL: " . $conexion->error; // Mostrar el error SQL si falla
+        echo "Error: " . mysqli_error($conexion);  // Muestra el error
     }
 } else {
-    echo "Error: Datos incompletos"; // Mostrar error si faltan datos
+    echo 0;  // Retorna 0 si no se recibieron todos los campos
 }
 ?>

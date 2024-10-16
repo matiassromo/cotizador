@@ -4,7 +4,7 @@ header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache"); 
 header("Expires: 0"); 
 
-if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 136) {
+if (!isset($_SESSION['id_tipo_usuario']) || $_SESSION['id_tipo_usuario'] != 1) {
     header("Location: login.php");
     exit();
 }
@@ -16,6 +16,9 @@ if (isset($_SESSION['mensaje_login_exitoso'])) {
     unset($_SESSION['mensaje_login_exitoso']);
 }
 
+
+
+
 // Verificar si hay un mensaje de cierre de sesión exitoso
 $mensaje_logout = "";
 if (isset($_SESSION['mensaje_logout'])) {
@@ -23,48 +26,6 @@ if (isset($_SESSION['mensaje_logout'])) {
     unset($_SESSION['mensaje_logout']);
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - Cotizador</title>
-    <!-- Cargar Bootstrap y jQuery -->
-    <link rel="stylesheet" href="librerias/bootstrap/css/bootstrap.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-</head>
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a href="index.php" class="navbar-brand">Administrador</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php#crear_usuario">Crear Usuario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php#ver_usuarios">Ver Usuarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php#tipos_usuarios">Tipos de Usuarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php#cotizador">Ir al Cotizador</a>
-                    </li>
-                </ul>
-                <a href="#" class="btn btn-danger" id="cerrarSesionBtn">Cerrar Sesión</a>
-            </div>
-        </div>
-    </nav>
 
     <!-- Sección de Cotizador -->
     <div id="cotizador" class="container mt-5">

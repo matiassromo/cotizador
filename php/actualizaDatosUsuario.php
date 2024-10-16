@@ -7,13 +7,15 @@ $nombre = $_POST['nombre'];
 $apellido = $_POST['apellido'];
 $email = $_POST['email'];
 $estado = $_POST['estado'];
-$id_tipo_usuario = $_POST['id_tipo_usuario'];
+$tipo_usuario = $_POST['tipo_usuario'];  // ID del tipo de usuario
 
-$sql = "UPDATE usuarios SET nombre_usuario = '$nombre', apellido_usuario = '$apellido', email = '$email', estado = '$estado', id_tipo_usuario = '$id_tipo_usuario' WHERE id_usuario = '$id'";
+$sql = "UPDATE usuarios SET 
+        nombre_usuario = '$nombre', 
+        apellido_usuario = '$apellido', 
+        email = '$email', 
+        estado = '$estado', 
+        id_tipo_usuario = '$tipo_usuario' 
+        WHERE id_usuario = '$id'";
 
-if ($conexion->query($sql)) {
-    echo 1;
-} else {
-    echo 0;
-}
+echo mysqli_query($conexion, $sql);
 ?>

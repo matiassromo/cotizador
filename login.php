@@ -17,7 +17,7 @@ $conexion = conexion();
 // Verificar si ya hay una sesión iniciada y redirigir al dashboard si es el administrador
 if (isset($_SESSION['id_tipo_usuario']) && $_SESSION['id_tipo_usuario'] == 1) {
     header("Location: index.php");
-    exit();
+    exit();  // Detenemos el script después de redirigir
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -40,11 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows === 1) {
         $usuario = $result->fetch_assoc();
 
-        $hashed_password = password_hash('admin123', PASSWORD_DEFAULT);
-        echo $hashed_password;
-
-
-
         // Verificar la contraseña usando password_verify
         if (password_verify($password, $usuario['password'])) {
             // Iniciar la sesión y guardar los datos del usuario
@@ -58,7 +53,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirigir al dashboard del administrador si es admin
             header("Location: index.php");
-            exit();
+            echo "Redirigiendo al dashboard...";
+
+            exit();  // Detenemos el script después de redirigir
         } else {
             $error = "Contraseña incorrecta";
         }
