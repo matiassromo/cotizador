@@ -15,10 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
 
     // Verificar que el email tenga el dominio correcto (@heka.com.ec)
-    if (!preg_match('/@heka\.com\.ec$/', $email)) {
+    /*if (!preg_match('/@heka\.com\.ec$/', $email)) {
         echo "Solo se permiten correos corporativos de @heka.com.ec";
         exit();
-    }
+    }*/
 
     // Generar una contraseña temporal aleatoria
     $passwordTemporal = bin2hex(random_bytes(4)); // Genera una contraseña aleatoria de 8 caracteres
@@ -55,6 +55,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->isHTML(true);
             $mail->Subject = 'Contraseña temporal';
             $mail->Body = "<p>Hola $nombres,</p><p>Tu contraseña temporal es: <strong>$passwordTemporal</strong></p><p>Por favor, inicia sesión y cámbiala lo antes posible.</p>";
+
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );            
 
             // Enviar el correo
             $mail->send();

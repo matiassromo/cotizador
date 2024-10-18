@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" name="email" pattern=".+@heka\.com\.ec" required>
+                            <input type="email" class="form-control" id="email" name="email" <!--pattern=".+@heka\.com\.ec-->" required>
                         </div>
                         <button type="button" class="btn btn-warning w-100" onclick="registrarUsuario()">Registrar</button>
                     </form>
