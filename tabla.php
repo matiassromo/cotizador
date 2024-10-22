@@ -16,22 +16,20 @@ $conexion = conexion();
             <thead>
                 <tr>
                     <th>Tipo de usuario</th>
-                    <th>Estado</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
                 <?php 
-                $sql = "SELECT id_tipo_usuario, nombre_tipo, estado FROM tipo_usuarios WHERE nombre_tipo != 'Administrador'";
+                $sql = "SELECT id_tipo_usuario, nombre_tipo FROM tipo_usuarios WHERE nombre_tipo != 'Administrador'";
                 $result = mysqli_query($conexion, $sql); 
                 
                 while ($ver = mysqli_fetch_row($result)) {
-                    $datos = $ver[0] . "||" . $ver[1] . "||" . $ver[2];
+                    $datos = $ver[0] . "||" . $ver[1];
                 ?>
                 <tr>
                     <td><?php echo $ver[1]; ?></td>
-                    <td><?php echo $ver[2] == 'A' ? 'Activo' : 'Inactivo'; ?></td>
                     <td>
                         <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalEdicion" onclick="agregaform('<?php echo $datos; ?>')">
                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -67,13 +65,6 @@ $conexion = conexion();
           <label for="tusuario">Tipo de Usuario</label>
           <input type="text" id="tusuario" class="form-control">
         </div>
-        <div class="form-group">
-          <label for="estado">Estado</label>
-          <select id="estado" class="form-control">
-            <option value="A">Activo</option>
-            <option value="I">Inactivo</option>
-          </select>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -98,13 +89,6 @@ $conexion = conexion();
           <label for="tipousuario">Tipo de Usuario</label>
           <input type="text" id="tipousuario" class="form-control">
         </div>
-        <div class="form-group mt-2">
-          <label for="estadotipousuario">Estado</label>
-          <select id="estadotipousuario" class="form-control">
-            <option value="A">Activo</option>
-            <option value="I">Inactivo</option>
-          </select>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -119,16 +103,14 @@ $conexion = conexion();
         var d = datos.split('||');
         $('#idtipo').val(d[0]);
         $('#tipousuario').val(d[1]);
-        $('#estadotipousuario').val(d[2]);
     }
 
     // Función para agregar tipo de usuario
     $('#guardartipousuario').click(function() {
         var tusuario = $('#tusuario').val();
-        var estado = $('#estado').val();
 
         // Verifica que los campos no estén vacíos
-        if (tusuario.trim() === "" || estado.trim() === "") {
+        if (tusuario.trim() === "") {
             alertify.error("Todos los campos son obligatorios.");
             return;
         }
@@ -137,7 +119,7 @@ $conexion = conexion();
         $.ajax({
             type: "POST",
             url: "php/agregarDatos.php",
-            data: { tusuario: tusuario, estado: estado },
+            data: {tusuario: tusuario},
             success: function(response) {
                 if (response == 1) {
                     alertify.success("Agregado con éxito!");
@@ -157,9 +139,8 @@ $conexion = conexion();
     $('#actualizatipousuario').click(function(){
         var id = $('#idtipo').val();
         var tipo = $('#tipousuario').val();
-        var estado = $('#estadotipousuario').val();
 
-        if (tipo.trim() === "" || estado.trim() === "") {
+        if (tipo.trim() === "") {
             alertify.error("Todos los campos son obligatorios.");
             return;
         }
@@ -167,7 +148,7 @@ $conexion = conexion();
         $.ajax({
             type: "POST",
             url: "php/actualizaDatos.php",
-            data: { id: id, tipo: tipo, estado: estado },
+            data: {id: id, tipo: tipo},
             success: function(response) {
                 if (response == 1) {
                     alertify.success("Actualizado con éxito!");

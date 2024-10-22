@@ -8,3 +8,4 @@ $hash_password = password_hash($nueva_password, PASSWORD_BCRYPT);
 // Mostrar el hash generado
 echo "Hash de la contraseña admin123: " . $hash_password;
 ?>
+

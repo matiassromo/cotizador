@@ -1,6 +1,6 @@
 <?php
 function conexion() {
-    $servidor = "localhost";  // Cambia estos valores si es necesario
+    $servidor = "127.0.0.1";  // Cambia estos valores si es necesario
     $usuario = "root";
     $password = "";
     $bd = "cotizador";  // Asegúrate de que el nombre de la base de datos sea el correcto

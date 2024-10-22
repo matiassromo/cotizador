@@ -1,0 +1,25 @@
+<?php
+require_once 'conexion.php';
+$conexion = conexion();
+
+$id = isset($_POST['id']) ? $_POST['id'] : null;
+$estado = isset($_POST['estado']) ? $_POST['estado'] : null;
+
+if ($id && $estado) {
+    $sql = "UPDATE usuarios SET estado = ? WHERE id_usuario = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("si", $estado, $id);
+
+    if ($stmt->execute()) {
+        echo 1;  // Éxito
+    } else {
+        echo "Error en la ejecución de la consulta: " . $stmt->error;  // Mostrar el error exacto
+    }
+
+    $stmt->close();
+} else {
+    echo "Datos incompletos: ID o Estado no proporcionados.";
+}
+
+$conexion->close();
+?>

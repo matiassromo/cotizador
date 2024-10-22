@@ -37,7 +37,7 @@ $result_tipos_usuarios = mysqli_query($conexion, $sql_tipos_usuarios);
                 SELECT u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.email, u.estado, tu.nombre_tipo, tu.id_tipo_usuario
                 FROM usuarios u
                 JOIN tipo_usuarios tu ON u.id_tipo_usuario = tu.id_tipo_usuario
-                WHERE u.id_usuario != 1
+                WHERE u.id_usuario != 1 AND u.estado = 'A'
             ";
             $result = mysqli_query($conexion, $sql);
 
@@ -188,24 +188,30 @@ $result_tipos_usuarios = mysqli_query($conexion, $sql_tipos_usuarios);
 
     // Función para eliminar un registro
     function eliminarDatosUsuario(id) {
-        var cadena = "id=" + id;
+        var cadena = "id=" + id + "&estado=I";  // Actualizar el estado a Inactivo
+        console.log("Datos enviados:", cadena);  // Revisar los datos que se están enviando
         $.ajax({
             type: "POST",
-            url: "php/eliminarDatosUsuario.php",  // URL corregida
+            url: "php/eliminarDatosUsuario.php",  // El archivo que actualizará el estado
             data: cadena,
             success: function(r) {
+                console.log("Respuesta del servidor:", r);  // Ver la respuesta exacta del servidor
                 if (r == 1) {
-                    alertify.success("Eliminado con éxito!");
-                    $('#tabla').load('ver_usuarios.php');
+                    alertify.success("Usuario marcado como inactivo!");
+                    $('#tabla').load('ver_usuarios.php');  // Recargar la tabla después de la eliminación
                 } else {
-                    alertify.error("Error al eliminar el registro.");
+                    alertify.error("Error al actualizar el estado del usuario: " + r);
                 }
             },
             error: function(xhr, status, error) {
+                console.log("Error de comunicación con el servidor:", xhr, status, error);
                 alertify.error("Error de comunicación con el servidor.");
             }
         });
     }
+
+
+
 
     // Función para agregar un nuevo usuario
    $('#guardarUsuario').click(function(){
